@@ -1,5 +1,7 @@
 package kmo.lambdas;
 
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -49,6 +51,38 @@ public class LambdaExamples {
         final Supplier<String> supplier = () -> "demo";
         System.out.println(supplier.get());
 
+        // real world example
+        final Supplier<String> bigSupplier = () -> String.join(", ", Locale.getISOLanguages());
+        final String bigString = String.join(", ", Locale.getISOLanguages());
+
+        doSomething(bigString);
+        doSomething(bigSupplier);
+
+        final var localeWithOrElse = Optional.ofNullable(Locale.getDefault())
+                .orElse(getCanada());
+
+        final var localeWithOrElseGet = Optional.ofNullable(Locale.getDefault())
+                .orElseGet(LambdaExamples::getCanada);
+
+        System.out.println(localeWithOrElse);
+        System.out.println(localeWithOrElseGet);
+    }
+
+    static Locale getCanada() {
+        System.out.println("entered");
+        return Locale.CANADA;
+    }
+
+    static void doSomething(final String object) {
+        if (Locale.getDefault() == Locale.GERMANY) {
+            System.out.println(object);
+        }
+    }
+
+    static void doSomething(final Supplier<String> supplier) {
+        if (Locale.getDefault() == Locale.GERMANY) {
+            System.out.println(supplier.get());
+        }
     }
 
     static class DirtyFunctionBeforeJava8 implements Runnable {
